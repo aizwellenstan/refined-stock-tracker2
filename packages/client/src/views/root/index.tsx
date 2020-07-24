@@ -61,7 +61,7 @@ export const Root = () => {
         <meta
           name="apple-mobile-web-app-title"
           content={t('meta.title', {
-            defaultValue: 'Refined Itsukara.link',
+            defaultValue: 'Refined Stock Tracker',
           })}
         />
         <meta name="apple-mobile-web-app-capable" content="yes" />
