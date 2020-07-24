@@ -1,0 +1,15 @@
+{
+  "name": "@ril/gateway",
+  "version": "1.0.0",
+  "main": "./dist/index.js",
+  "license": "MIT",
+  "scripts": {
+    "build": "tsc -p ."
+  },
+  "dependencies": {
+    "fp-ts": "^2.1.1",
+    "gaxios": "^2.1.0",
+    "io-ts": "^2.0.1",
+    "typescript": "^3.6.4"
+  }
+}
