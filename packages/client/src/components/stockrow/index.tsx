@@ -32,32 +32,36 @@ class StockRow extends Component<Props, dataState>{
         fetch(url)
         .then((response) => response.json())
         .then((data) => {
-            for(var key in data['Time Series (Daily)']) {
-                    stockChartXValuesFunc.push(key)
-                    stockChartYValuesFunc.push(data['Time Series (Daily)']
-                    [key]['1. open']);
-            }
             // for(var key in data['Time Series (Daily)']) {
-            //     stockChartXValuesFunc.push(key)
-            //     stockChartYValuesFunc.push(data['Time Series (Daily)']
-            //     [key]);
+            //         stockChartXValuesFunc.push(key)
+            //         stockChartYValuesFunc.push(data['Time Series (Daily)']
+            //         [key]['1. open']);
             // }
+            for(var key in data['Time Series (Daily)']) {
+                stockChartXValuesFunc.push(key)
+                stockChartYValuesFunc.push(data['Time Series (Daily)']
+                [key]);
+            }
 
             // rebuild data
-            // let dataModified = stockChartYValuesFunc.map(
-            //     (obj :any)=> {
-            //         return {
-            //             "id" : obj._id,
-            //             "email":obj.email,
-            //             "image":obj.image,
-            //             "name":obj.name
-            //         }
-            //     }
-            // );
+            let dataModified = stockChartYValuesFunc.map(
+                (obj :any)=> {
+                    return {
+                        "open": obj["1. open"],
+                        "high": obj["2. high"],
+                        "low": obj["3. low"],
+                        "close": obj["4. close"],
+                        "adjusted_close" :obj["5. adjusted close"],
+                        "volume": obj["6. volume"],
+                        "devidend_amount": obj["7. devidend amount"],
+                        "split_coefficient": obj["8. split coefficient"]
+                    }
+                }
+            );
 
             this.setState({
                 stockChartXValues: stockChartXValuesFunc,
-                stockChartYValues: stockChartYValuesFunc
+                stockChartYValues: dataModified
             })
             console.log(this.state.stockChartYValues);
         })
@@ -137,7 +141,7 @@ class StockRow extends Component<Props, dataState>{
         return (
             <tr>
                 <td>{this.props.ticker}</td>
-                <td>{this.state.stockChartYValues[0]}</td>
+                <td>{this.state.stockChartYValues[0].close}</td>
                 <td>{this.state.stockChartXValues[0]}</td>
                 {/* <td>{this.state.data[this.state.data.length-1].close}</td>
                 <td>{this.state.data[this.state.data.length-1].date}</td>
