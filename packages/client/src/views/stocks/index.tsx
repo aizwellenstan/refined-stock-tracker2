@@ -110,31 +110,32 @@ export class Stocks extends Component<Props, dataState>{
     super(props)
     this.state = {
         data:[
-          'AAPL','AMZN','MSFT'
+          // 'AAPL','AMZN','MSFT'
         ],
       }
   }
 
-  // componentDidMount() {
-  //   const url = 
-  //   `/api/stock/${this.props.ticker}/intraday-prices?chartLast=1`
-  //   `/symbols`
-  //   `http://localhost:3000/symbols`
+  componentDidMount() {
+    const url = 
+    // `/api/stock/${this.props.ticker}/intraday-prices?chartLast=1`
+    // `/symbols`
+    `http://localhost:3000/symbols`
     
-  //   fetch(url)
-  //   .then((response) => {
-  //     if (response.ok) {
-  //       return response.json();
-  //     } else {
-  //       throw new Error('Something went wrong');
-  //     }
-  //   })
-  //   .then((data) => {
-  //       this.setState({
-  //               data: data
-  //       });
-  //   })
-  // }
+    fetch(url)
+    .then((response) => {
+      if (response.ok) {
+        return response.json();
+      } else {
+        throw new Error('Something went wrong');
+      }
+    })
+    .then((data) => {
+        this.setState({
+                data: data
+        });
+        console.log(data);
+    })
+  }
 
   
   
@@ -158,8 +159,13 @@ export class Stocks extends Component<Props, dataState>{
             </thead>
             <tbody>
             {this.state.data.map((value :any, index: any) => {
-                return <StockRow key={index} ticker={value.toLowerCase()} />
+              if(value.type="cs" && value.exchange=="NAS" && index <60)
+                return <StockRow key={index} ticker={value.symbol.toLowerCase()} />
+                // return <div>{value.symbol}</div>
             })}
+            {/* {this.state.data.map((value :any, index: any) => {
+                return <StockRow key={index} ticker={value.toLowerCase()} />
+            })} */}
               {/* <StockRow ticker="aapl" />
               <StockRow ticker="goog" />
               <StockRow ticker="msft" />

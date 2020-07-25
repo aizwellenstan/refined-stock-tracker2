@@ -37,12 +37,20 @@ class StockRow extends Component<Props, dataState>{
             //         stockChartYValuesFunc.push(data['Time Series (Daily)']
             //         [key]['1. open']);
             // }
-            for(var key in data['Time Series (Daily)']) {
-                stockChartXValuesFunc.push(key)
-                stockChartYValuesFunc.push(data['Time Series (Daily)']
-                [key]);
+
+            if(data['Time Series (Daily)'] !== undefined) {
+                for(var key in data['Time Series (Daily)']) {
+                    if(Object.keys(data['Time Series (Daily)'][key]).length !== 0)
+                    {
+                        stockChartXValuesFunc.push(key)
+                        stockChartYValuesFunc.push(data['Time Series (Daily)']
+                        [key]);
+                    }
+                    
+                }
             }
 
+            
             // rebuild data
             let dataModified = stockChartYValuesFunc.map(
                 (obj :any)=> {
@@ -58,70 +66,73 @@ class StockRow extends Component<Props, dataState>{
                     }
                 }
             );
-
-            this.setState({
-                stockChartXValues: stockChartXValuesFunc,
-                stockChartYValues: dataModified
-            })
-            console.log(this.state.stockChartYValues);
+            console.log(dataModified)
+            
+            if(dataModified.length !== 0)
+            {
+                this.setState({
+                    stockChartXValues: stockChartXValuesFunc,
+                    stockChartYValues: dataModified
+                })
+            }
         })
         
-        // this.CheckSignal()
+        this.CheckSignal()
     }
 
-    // CheckSignal(){
-    //     let data = this.state.stockChartYValues
-    //     let length = data.length;
+    CheckSignal(){
+        let data = this.state.stockChartYValues
+        let length = data.length;
         
-    //     if (length >= 4 && data[length-1]!=="fetching")
-    //     {
-    //         let rr = 18;
+        if (length >= 4 && data[length-1].close!=="fetching")
+        {
+            let rr = 18;
 
-    //         let lowArr = [data[length-1].low,data[length-2].low,data[length-3].low,data[length-4].low];
-    //         let lower = Math.min(...lowArr);
+            let lowArr = [data[length-1].low,data[length-2].low,data[length-3].low,data[length-4].low];
+            let lower = Math.min(...lowArr);
 
-    //         let highArr = [data[length-1].high,data[length-2].high,data[length-3].high,data[length-4].high];
-    //         let upper = Math.max(...highArr);
+            let highArr = [data[length-1].high,data[length-2].high,data[length-3].high,data[length-4].high];
+            let upper = Math.max(...highArr);
 
-    //         let open, sl, tp;
+            let open, sl, tp;
 
-    //         if
-    //         (
-    //             data[length-1].close > data[length-2].close &&
-    //             data[length-2].close > data[length-3].close &&
-    //             data[length-3].close < data[length-4].close &&
-    //             data[length-4].close < data[length-5].close
-    //         )
-    //         {
-    //             open = upper;
-    //             sl = upper-(upper-lower)/rr;
-    //             tp = upper+(upper-(upper-(upper-lower)/rr))*30;
-    //         }
+            if
+            (
+                data[length-1].close > data[length-2].close &&
+                data[length-2].close > data[length-3].close &&
+                data[length-3].close < data[length-4].close &&
+                data[length-4].close < data[length-5].close
+            )
+            {
+                open = upper;
+                sl = upper-(upper-lower)/rr;
+                tp = upper+(upper-(upper-(upper-lower)/rr))*30;
+            }
 
-    //         if
-    //         (
-    //             data[length-1].close < data[length-2].close &&
-    //             data[length-2].close < data[length-3].close &&
-    //             data[length-3].close > data[length-4].close &&
-    //             data[length-4].close > data[length-5].close
-    //         )
-    //         {
-    //             open = lower;
-    //             sl = lower+(upper-lower)/rr;
-    //             tp = lower-(lower+(upper-lower)/rr-lower)*30;
-    //         }
+            if
+            (
+                data[length-1].close < data[length-2].close &&
+                data[length-2].close < data[length-3].close &&
+                data[length-3].close > data[length-4].close &&
+                data[length-4].close > data[length-5].close
+            )
+            {
+                open = lower;
+                sl = lower+(upper-lower)/rr;
+                tp = lower-(lower+(upper-lower)/rr-lower)*30;
+            }
 
-    //         this.setState({
-    //             signal: {
-    //                 open: open,
-    //                 sl: sl,
-    //                 tp: tp
-    //             }
-    //         })
+            this.setState({
+                signal: {
+                    open: open,
+                    sl: sl,
+                    tp: tp
+                }
+            })
 
-    //     }
+        }
         
-    // }
+    }
 
     render() {
         // if(this.state.data[this.state.data.length-1].close ==null)
@@ -138,19 +149,24 @@ class StockRow extends Component<Props, dataState>{
         //         </tr>
         //     )
         // }
-        return (
-            <tr>
-                <td>{this.props.ticker}</td>
-                <td>{this.state.stockChartYValues[0].close}</td>
-                <td>{this.state.stockChartXValues[0]}</td>
-                {/* <td>{this.state.data[this.state.data.length-1].close}</td>
-                <td>{this.state.data[this.state.data.length-1].date}</td>
-                <td>{this.state.data[this.state.data.length-1].label}</td> */}
-                {/* <td>{this.state.signal.open}</td>
-                <td>{this.state.signal.sl}</td>
-                <td>{this.state.signal.tp}</td> */}
-            </tr>
-        );
+        if(this.state.stockChartXValues[0]!=="fetching"){
+            return (
+                <tr>
+                    <td>{this.props.ticker}</td>
+                    <td>{this.state.stockChartYValues[0].close}</td>
+                    <td>{this.state.stockChartXValues[0]}</td>
+                    {/* <td>{this.state.data[this.state.data.length-1].close}</td>
+                    <td>{this.state.data[this.state.data.length-1].date}</td>
+                    <td>{this.state.data[this.state.data.length-1].label}</td> */}
+                    {/* <td>{this.state.signal.open}</td>
+                    <td>{this.state.signal.sl}</td>
+                    <td>{this.state.signal.tp}</td> */}
+                </tr>
+            );
+        }else{
+            return<tr />
+        }
+        
     }
 }
 
