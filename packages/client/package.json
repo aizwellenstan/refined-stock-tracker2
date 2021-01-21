@@ -89,7 +89,7 @@
     "redux": "*",
     "ismobilejs": "*",
     "redux-saga": "*",
-    "immer": "^2.1.2",
+    "immer": "^8.0.1",
     "@fortawesome/free-solid-svg-icons": "*",
     "@fortawesome/react-fontawesome": "*",
     "@fortawesome/fontawesome-svg-core": "*",
